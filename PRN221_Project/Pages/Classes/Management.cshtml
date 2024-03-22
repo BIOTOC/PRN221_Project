@@ -1,0 +1,99 @@
+﻿@page "/Home"
+@model PRN221_Project.Pages.Classes.ManagementModel
+@{
+    ViewData["Title"] = "MainWindow";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col">
+                <div class="form-group">
+                    <button class="btn btn-primary" onclick="importData()">Import</button>
+                    <select id="cbxRoom" class="form-control">
+                    </select>
+                    <button class="btn btn-success" onclick="addData()">Add</button>
+                    <button class="btn btn-danger" onclick="deleteData()">Delete</button>
+                    <button class="btn btn-warning" onclick="updateData()">Update</button>
+                    <button class="btn btn-info" onclick="showData()">Show</button>
+                </div>
+                <div class="form-group">
+                    <label for="txtClass">Class:</label>
+                    <input type="text" id="txtClass" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="txtSubject">Subject:</label>
+                    <input type="text" id="txtSubject" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="txtTeacher">Teacher:</label>
+                    <input type="text" id="txtTeacher" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="txtRoom">Room:</label>
+                    <input type="text" id="txtRoom" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="txtTime">Time:</label>
+                    <input type="text" id="txtTime" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Class</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Teacher</th>
+                            <th scope="col">Room</th>
+                            <th scope="col">TimeSlot</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lvProducts">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"></script>
+    <script>
+        // JavaScript functions for handling button clicks and other events
+        function importData() {
+            // Your import data logic here
+        }
+
+        function addData() {
+            // Your add data logic here
+        }
+
+        function deleteData() {
+            // Your delete data logic here
+        }
+
+        function updateData() {
+            // Your update data logic here
+        }
+
+        function showData() {
+            // Your show data logic here
+        }
+    </script>
+</body>
+</html>

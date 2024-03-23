@@ -1,4 +1,5 @@
 ﻿@page "/Home"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model PRN221_Project.Pages.Classes.ManagementModel
 @{
     ViewData["Title"] = "Class Management";
@@ -8,7 +9,7 @@
 <html>
 <head>
     <title>@ViewData["Title"]</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
     <div class="container">
@@ -22,26 +23,26 @@
             <button type="submit" class="btn btn-primary">Import</button>
         </form>
 
-        <form method="post">
+        <form asp-page-handler="Add" method="post">
             <div class="form-group">
                 <label for="txtClass">Class:</label>
-                <input type="text" id="txtClass" class="form-control" asp-for="Calendar.Class">
+                <input type="text" id="txtClass" name="txtClass" class="form-control">
             </div>
             <div class="form-group">
                 <label for="txtSubject">Subject:</label>
-                <input type="text" id="txtSubject" class="form-control" asp-for="Calendar.Subject">
+                <input type="text" id="txtSubject" name="txtSubject" class="form-control">
             </div>
             <div class="form-group">
                 <label for="txtTeacher">Teacher:</label>
-                <input type="text" id="txtTeacher" class="form-control" asp-for="Calendar.Teacher">
+                <input type="text" id="txtTeacher" name="txtTeacher" class="form-control">
             </div>
             <div class="form-group">
                 <label for="txtRoom">Room:</label>
-                <input type="text" id="txtRoom" class="form-control" asp-for="Calendar.Room">
+                <input type="text" id="txtRoom" name="txtRoom" class="form-control">
             </div>
             <div class="form-group">
                 <label for="txtTime">Time:</label>
-                <input type="text" id="txtTime" class="form-control" asp-for="Calendar.TimeSlot">
+                <input type="text" id="txtTime" name="txtTime" class="form-control">
             </div>
             <button type="submit" class="btn btn-success">Add</button>
         </form>
@@ -67,7 +68,7 @@
                         <td>@item.Room</td>
                         <td>@item.TimeSlot</td>
                         <td>
-                            <form method="post">
+                            <form asp-page-handler="Delete" method="post">
                                 <input type="hidden" name="id" value="@item.Id">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
@@ -77,8 +78,5 @@
             </tbody>
         </table>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"></script>
 </body>
 </html>

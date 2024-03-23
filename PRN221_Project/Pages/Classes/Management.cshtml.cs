@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PRN221_Project.Models;
+using System.Diagnostics;
 
 namespace PRN221_Project.Pages.Classes
 {
@@ -128,23 +129,43 @@ namespace PRN221_Project.Pages.Classes
             return RedirectToPage();
         }
 
-        [BindProperty]
-        public Calendar Calendar { get; set; }
-
-        public IActionResult OnPostCreate()
+        public IActionResult OnPostAdd(string txtClass, string txtSubject, string txtTeacher, string txtRoom, string txtTime)
         {
-            if (!ModelState.IsValid)
+            if (!IsValidTimeSlot(txtTime))
             {
+                ModelState.AddModelError(string.Empty, "Invalid time slot.");
                 return Page();
             }
 
-            context.Calendars.Add(Calendar);
+            if (IsDuplicateEntry(txtClass, txtSubject, txtTeacher, txtRoom, txtTime))
+            {
+                ModelState.AddModelError(string.Empty, "Duplicate entry.");
+                return Page();
+            }
+
+            if (!CheckConflict(txtClass, txtSubject, txtTeacher, txtRoom, txtTime))
+            {
+                ModelState.AddModelError(string.Empty, "Conflict detected.");
+                return Page();
+            }
+
+            var newCalendar = new Calendar
+            {
+                Class = txtClass,
+                Subject = txtSubject,
+                Teacher = txtTeacher,
+                Room = txtRoom,
+                TimeSlot = txtTime
+            };
+
+            context.Calendars.Add(newCalendar);
             context.SaveChanges();
 
             return RedirectToPage();
         }
 
-        public IActionResult OnPostEdit(int id)
+
+        public IActionResult OnPostEdit(int id, string txtClass, string txtSubject, string txtTeacher, string txtRoom, string txtTime)
         {
             var calendarToUpdate = context.Calendars.Find(id);
 
@@ -158,7 +179,11 @@ namespace PRN221_Project.Pages.Classes
                 return Page();
             }
 
-            context.Attach(Calendar).State = EntityState.Modified;
+            calendarToUpdate.Class = txtClass;
+            calendarToUpdate.Subject = txtSubject;
+            calendarToUpdate.Teacher = txtTeacher;
+            calendarToUpdate.Room = txtRoom;
+            calendarToUpdate.TimeSlot = txtTime;
 
             try
             {
@@ -166,7 +191,7 @@ namespace PRN221_Project.Pages.Classes
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CalendarExists(Calendar.Id))
+                if (!CalendarExists(calendarToUpdate.Id))
                 {
                     return NotFound();
                 }

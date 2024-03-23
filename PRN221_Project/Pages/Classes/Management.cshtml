@@ -1,7 +1,7 @@
 ﻿@page "/Home"
 @model PRN221_Project.Pages.Classes.ManagementModel
 @{
-    ViewData["Title"] = "MainWindow";
+    ViewData["Title"] = "Class Management";
 }
 
 <!DOCTYPE html>
@@ -12,88 +12,73 @@
 </head>
 <body>
     <div class="container">
-        <div class="row mt-5">
-            <div class="col">
-                <div class="form-group">
-                    <button class="btn btn-primary" onclick="importData()">Import</button>
-                    <select id="cbxRoom" class="form-control">
-                    </select>
-                    <button class="btn btn-success" onclick="addData()">Add</button>
-                    <button class="btn btn-danger" onclick="deleteData()">Delete</button>
-                    <button class="btn btn-warning" onclick="updateData()">Update</button>
-                    <button class="btn btn-info" onclick="showData()">Show</button>
-                </div>
-                <div class="form-group">
-                    <label for="txtClass">Class:</label>
-                    <input type="text" id="txtClass" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="txtSubject">Subject:</label>
-                    <input type="text" id="txtSubject" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="txtTeacher">Teacher:</label>
-                    <input type="text" id="txtTeacher" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="txtRoom">Room:</label>
-                    <input type="text" id="txtRoom" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="txtTime">Time:</label>
-                    <input type="text" id="txtTime" class="form-control" />
-                </div>
+        <h1>@ViewData["Title"]</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Import CSV file:</label>
+                <input type="file" class="form-control-file" id="file" name="file">
             </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Class</th>
-                            <th scope="col">Subject</th>
-                            <th scope="col">Teacher</th>
-                            <th scope="col">Room</th>
-                            <th scope="col">TimeSlot</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lvProducts">
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <button type="submit" class="btn btn-primary">Import</button>
+        </form>
+
+        <form method="post">
+            <div class="form-group">
+                <label for="txtClass">Class:</label>
+                <input type="text" id="txtClass" class="form-control" asp-for="Calendar.Class">
             </div>
-        </div>
+            <div class="form-group">
+                <label for="txtSubject">Subject:</label>
+                <input type="text" id="txtSubject" class="form-control" asp-for="Calendar.Subject">
+            </div>
+            <div class="form-group">
+                <label for="txtTeacher">Teacher:</label>
+                <input type="text" id="txtTeacher" class="form-control" asp-for="Calendar.Teacher">
+            </div>
+            <div class="form-group">
+                <label for="txtRoom">Room:</label>
+                <input type="text" id="txtRoom" class="form-control" asp-for="Calendar.Room">
+            </div>
+            <div class="form-group">
+                <label for="txtTime">Time:</label>
+                <input type="text" id="txtTime" class="form-control" asp-for="Calendar.TimeSlot">
+            </div>
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                    <th>TimeSlot</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Calendars)
+                {
+                    <tr>
+                        <td>@item.Class</td>
+                        <td>@item.Subject</td>
+                        <td>@item.Teacher</td>
+                        <td>@item.Room</td>
+                        <td>@item.TimeSlot</td>
+                        <td>
+                            <form method="post">
+                                <input type="hidden" name="id" value="@item.Id">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"></script>
-    <script>
-        // JavaScript functions for handling button clicks and other events
-        function importData() {
-            // Your import data logic here
-        }
-
-        function addData() {
-            // Your add data logic here
-        }
-
-        function deleteData() {
-            // Your delete data logic here
-        }
-
-        function updateData() {
-            // Your update data logic here
-        }
-
-        function showData() {
-            // Your show data logic here
-        }
-    </script>
 </body>
 </html>

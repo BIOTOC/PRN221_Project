@@ -2,18 +2,16 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model PRN221_Project.Pages.Classes.ManagementModel
 @{
-    ViewData["Title"] = "Class Management";
 }
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewData["Title"]</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
     <div class="container">
-        <h1>@ViewData["Title"]</h1>
+        <h1>List of Class</h1>
 
         <form method="post" enctype="multipart/form-data">
             <div class="form-group">
@@ -71,6 +69,10 @@
                             <form asp-page-handler="Delete" method="post">
                                 <input type="hidden" name="id" value="@item.Id">
                                 <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                            <form asp-page="./Edit" method="get">
+                                <input type="hidden" name="id" value="@item.Id">
+                                <button type="submit" class="btn btn-primary">Edit</button>
                             </form>
                         </td>
                     </tr>

@@ -15,6 +15,9 @@ namespace PRN221_Project.Pages.Classes
             this.context = context;
         }
 
+        public List<Calendar> Calendars { get; set; }
+
+
         public IActionResult OnPost(IFormFile file)
         {
             if (file == null || file.Length <= 0)
@@ -101,32 +104,10 @@ namespace PRN221_Project.Pages.Classes
                 (item.TimeSlot == time && item.Teacher == teacher && (item.Room != room || item.Class != clast || item.Subject != subject)));
         }
 
-        public List<Calendar> Calendars { get; set; }
-
         public IActionResult OnGet()
         {
             Calendars = context.Calendars.ToList();
             return Page();
-        }
-
-        public IActionResult OnPostDelete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var calendar = context.Calendars.Find(id);
-
-            if (calendar == null)
-            {
-                return NotFound();
-            }
-
-            context.Calendars.Remove(calendar);
-            context.SaveChanges();
-
-            return RedirectToPage();
         }
 
         public IActionResult OnPostAdd(string txtClass, string txtSubject, string txtTeacher, string txtRoom, string txtTime)
@@ -164,50 +145,70 @@ namespace PRN221_Project.Pages.Classes
             return RedirectToPage();
         }
 
-
-        public IActionResult OnPostEdit(int id, string txtClass, string txtSubject, string txtTeacher, string txtRoom, string txtTime)
+        public IActionResult OnPostDelete(int? id)
         {
-            var calendarToUpdate = context.Calendars.Find(id);
-
-            if (calendarToUpdate == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            var calendar = context.Calendars.Find(id);
+
+            if (calendar == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            calendarToUpdate.Class = txtClass;
-            calendarToUpdate.Subject = txtSubject;
-            calendarToUpdate.Teacher = txtTeacher;
-            calendarToUpdate.Room = txtRoom;
-            calendarToUpdate.TimeSlot = txtTime;
-
-            try
-            {
-                context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CalendarExists(calendarToUpdate.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            context.Calendars.Remove(calendar);
+            context.SaveChanges();
 
             return RedirectToPage();
         }
 
-        private bool CalendarExists(int id)
-        {
-            return context.Calendars.Any(e => e.Id == id);
-        }
+
+        //public IActionResult OnPostEdit(int id, string txtClass, string txtSubject, string txtTeacher, string txtRoom, string txtTime)
+        //{
+        //    var calendarToUpdate = context.Calendars.Find(id);
+
+        //    if (calendarToUpdate == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Page();
+        //    }
+
+        //    calendarToUpdate.Class = txtClass;
+        //    calendarToUpdate.Subject = txtSubject;
+        //    calendarToUpdate.Teacher = txtTeacher;
+        //    calendarToUpdate.Room = txtRoom;
+        //    calendarToUpdate.TimeSlot = txtTime;
+
+        //    try
+        //    {
+        //        context.SaveChanges();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!CalendarExists(calendarToUpdate.Id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return RedirectToPage();
+        //}
+
+        //private bool CalendarExists(int id)
+        //{
+        //    return context.Calendars.Any(e => e.Id == id);
+        //}
     }
 }
 

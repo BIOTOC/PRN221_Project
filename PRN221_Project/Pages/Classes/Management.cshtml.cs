@@ -81,7 +81,7 @@ namespace PRN221_Project.Pages.Classes
 
         private bool IsValidTimeSlot(string timeSlot)
         {
-            const string ValidTimeSlots = "A24,A35,A46,A52,A63,A25,A36,A42,A53,A64,P24,P35,P46,P52,P63,P25,P36,P42,P53,P64";
+            const string ValidTimeSlots = "A24,A35,A46,A52,A63,A42,A53,A64,A25,A36,P24,P35,P46,P52,P63,P42,P53,P64,P25,P36";
             return ValidTimeSlots.Split(',').Contains(timeSlot);
         }
 

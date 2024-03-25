@@ -17,20 +17,14 @@ namespace PRN221_Project.Models
         }
 
         public virtual DbSet<Calendar> Calendars { get; set; } = null!;
+        public virtual DbSet<Calender2> Calender2s { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                Console.WriteLine(Directory.GetCurrentDirectory());
-                IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-                var strConn = config["ConnectionStrings:MyConStr"];
-                optionsBuilder.UseSqlServer(strConn);
-
-
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server=localhost;database=PRN221_Project;uid=sa;pwd=123;TrustServerCertificate=True;");
             }
         }
 
@@ -61,6 +55,37 @@ namespace PRN221_Project.Models
                 entity.Property(e => e.TimeSlot)
                     .HasMaxLength(50)
                     .HasColumnName("timeSlot");
+            });
+
+            modelBuilder.Entity<Calender2>(entity =>
+            {
+                entity.ToTable("Calender2");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Class)
+                    .HasMaxLength(50)
+                    .HasColumnName("class");
+
+                entity.Property(e => e.Room)
+                    .HasMaxLength(50)
+                    .HasColumnName("room");
+
+                entity.Property(e => e.Session)
+                    .HasMaxLength(50)
+                    .HasColumnName("session");
+
+                entity.Property(e => e.Slot1).HasColumnName("slot1");
+
+                entity.Property(e => e.Slot2).HasColumnName("slot2");
+
+                entity.Property(e => e.Subject)
+                    .HasMaxLength(50)
+                    .HasColumnName("subject");
+
+                entity.Property(e => e.Teacher)
+                    .HasMaxLength(50)
+                    .HasColumnName("teacher");
             });
 
             OnModelCreatingPartial(modelBuilder);

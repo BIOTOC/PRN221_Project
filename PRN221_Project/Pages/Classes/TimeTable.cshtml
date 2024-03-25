@@ -1,5 +1,6 @@
 ﻿@page "/TimeTable"
 @model PRN221_Project.Pages.Classes.TimeTableModel
+@using  PRN221_Project.Models
 @{
 }
 
@@ -27,9 +28,9 @@
             <label for="classSelect" class="form-label">Select Class:</label>
             <select class="form-select" id="classSelect">
                 <option value="">-- Select Class --</option>
-                @foreach (var uniqueClass in Model.Calendars.Select(c => c.Class).Distinct())
+                @foreach (var uniqueRoom in Model.Calendars.Select(c => c.Class).Distinct())
                 {
-                    <option value="@uniqueClass">@uniqueClass</option>
+                    <option value="@uniqueRoom">@uniqueRoom</option>
                 }
             </select>
         </div>
@@ -45,191 +46,23 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Calendars)
-                {
-                    string letter = item.TimeSlot.Substring(0, 1);
-                    string num1 = item.TimeSlot.Substring(1, 1);
-                    string num2 = item.TimeSlot.Substring(2, 1);
-
-                    @if (letter.Equals("A"))
+               
+                @for(int i = 1; i <=4;i++){
+                    <tr>
+                        <td>Slot @i</td>
+                    @for(int j = 2; j <= 6; j++)
                     {
-                        <tr>
-                            <td>Slot 1 - @item.Class</td>
-                            @if (num1.Equals("2"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num1.Equals("3"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num1.Equals("4"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num1.Equals("5"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num1.Equals("6"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>Slot 2 - @item.Class</td>
-                            @if (num2.Equals("2"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num2.Equals("3"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num2.Equals("4"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num2.Equals("5"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num2.Equals("6"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                        </tr>
+                        var key = Tuple.Create(i, j);
+                        Calender2 calender2 = new Calender2();
+                        if(Model.TimeSlot.TryGetValue(key,out calender2))
+                        {
+                            <td>@calender2.Teacher <br /> @calender2.Room<br />@calender2.Subject</td>
+                        }else{
+                            <td></td>
+                        }
                     }
+                    </tr>
 
-                    @if (letter.Equals("P"))
-                    {
-                        <tr>
-                            <td>Slot 3 - @item.Class</td>
-                            @if (num1.Equals("2"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num1.Equals("3"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num1.Equals("4"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num1.Equals("5"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num1.Equals("6"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>Slot 4 - @item.Class</td>
-                            @if (num2.Equals("2"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num2.Equals("3"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num2.Equals("4"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num2.Equals("5"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                            @if (num2.Equals("6"))
-                            {
-                                <td>@item.Teacher - @item.Room - @item.Subject</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                        </tr>
-                    }
                 }
             </tbody>
         </table>
@@ -250,4 +83,3 @@
         });
     </script>
 </body>
-

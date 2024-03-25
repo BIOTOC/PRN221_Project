@@ -165,50 +165,6 @@ namespace PRN221_Project.Pages.Classes
             return RedirectToPage();
         }
 
-
-        //public IActionResult OnPostEdit(int id, string txtClass, string txtSubject, string txtTeacher, string txtRoom, string txtTime)
-        //{
-        //    var calendarToUpdate = context.Calendars.Find(id);
-
-        //    if (calendarToUpdate == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Page();
-        //    }
-
-        //    calendarToUpdate.Class = txtClass;
-        //    calendarToUpdate.Subject = txtSubject;
-        //    calendarToUpdate.Teacher = txtTeacher;
-        //    calendarToUpdate.Room = txtRoom;
-        //    calendarToUpdate.TimeSlot = txtTime;
-
-        //    try
-        //    {
-        //        context.SaveChanges();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!CalendarExists(calendarToUpdate.Id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return RedirectToPage();
-        //}
-
-        //private bool CalendarExists(int id)
-        //{
-        //    return context.Calendars.Any(e => e.Id == id);
-        //}
     }
 }
 

@@ -25,12 +25,12 @@
     <div class="container">
         <h1>Schedule</h1>
         <div class="mb-3">
-            <label for="classSelect" class="form-label">Select Class:</label>
-            <select class="form-select" id="classSelect">
-                <option value="">-- Select Class --</option>
-                @foreach (var uniqueRoom in Model.Calendars.Select(c => c.Class).Distinct())
+            <label for="teacherSelect" class="form-label">Select Class:</label>
+            <select class="form-select" id="teacherSelect">
+                <option value="">-- Select Teacher --</option>
+                @foreach (var teacher in Model.list.Select(c => c.Teacher).Distinct())
                 {
-                    <option value="@uniqueRoom">@uniqueRoom</option>
+                    <option value="@teacher">@teacher</option>
                 }
             </select>
         </div>
@@ -69,17 +69,9 @@
     </div>
 
     <script>
-        document.getElementById("classSelect").addEventListener("change", function () {
-            var selectedClass = this.value;
-            var rows = document.querySelectorAll("#classTimeTable tbody tr");
-            rows.forEach(function (row) {
-                var classCell = row.cells[0].innerText;
-                if (classCell.includes(selectedClass) || selectedClass === "") {
-                    row.style.display = "table-row";
-                } else {
-                    row.style.display = "none";
-                }
-            });
+        document.getElementById("teacherSelect").addEventListener("change", function () {
+            var selectedTeacher = this.value;
+            window.location.href = "/TimeTable?teacher=" + selectedTeacher;
         });
     </script>
 </body>

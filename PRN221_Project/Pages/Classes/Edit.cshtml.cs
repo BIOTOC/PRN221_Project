@@ -14,7 +14,9 @@ namespace PRN221_Project.Pages.Classes
             this.context = _context;
         }
 
-        public Calendar Calendar { get; private set; }
+        public Calender2 Calendar { get; private set; }
+        public string ErrorMessage { get; set; }
+
 
         public IActionResult OnGet(int? id)
         {
@@ -23,7 +25,7 @@ namespace PRN221_Project.Pages.Classes
                 return NotFound();
             }
 
-            Calendar = context.Calendars.FirstOrDefault(x => x.Id == id); 
+            Calendar = context.Calender2s.FirstOrDefault(x => x.Id == id); 
 
             if (Calendar == null)
             {
@@ -35,7 +37,7 @@ namespace PRN221_Project.Pages.Classes
 
         public IActionResult OnPost(int id, string txtClass, string txtSubject, string txtTeacher, string txtRoom, string txtTime)
         {
-            var calendarToUpdate = context.Calendars.Find(id);
+            var calendarToUpdate = context.Calender2s.Find(id);
 
             if (calendarToUpdate == null)
             {
@@ -49,27 +51,33 @@ namespace PRN221_Project.Pages.Classes
 
             if (!IsValidTimeSlot(txtTime))
             {
-                ModelState.AddModelError(string.Empty, "Invalid time slot.");
+                ErrorMessage =  "Invalid time slot.";
+                Calendar = context.Calender2s.Find(id);
+
                 return Page();
             }
 
             if (IsDuplicateEntry(txtClass, txtSubject, txtTeacher, txtRoom, txtTime))
             {
-                ModelState.AddModelError(string.Empty, "Duplicate entry.");
+                ErrorMessage = "Duplicate entry.";
+                Calendar = context.Calender2s.Find(id);
                 return Page();
             }
 
             if (!CheckConflict(txtClass, txtSubject, txtTeacher, txtRoom, txtTime))
             {
-                ModelState.AddModelError(string.Empty, "Conflict detected.");
-                return Page();
+               ErrorMessage = "Conflict detected.";
+                Calendar = context.Calender2s.Find(id);
+               return Page();
             }
 
             calendarToUpdate.Class = txtClass;
             calendarToUpdate.Subject = txtSubject;
             calendarToUpdate.Teacher = txtTeacher;
             calendarToUpdate.Room = txtRoom;
-            calendarToUpdate.TimeSlot = txtTime;
+            calendarToUpdate.Session = txtTime.Substring(0, 1);
+            calendarToUpdate.Slot1 = int.Parse(txtTime.Substring(1, 1));
+            calendarToUpdate.Slot2 = int.Parse(txtTime.Substring(2, 1));
 
             try
             {
@@ -93,7 +101,7 @@ namespace PRN221_Project.Pages.Classes
 
         private bool CalendarExists(int id)
         {
-            return context.Calendars.Any(e => e.Id == id);
+            return context.Calender2s.Any(e => e.Id == id);
         }
 
         private bool IsValidTimeSlot(string timeSlot)
@@ -104,21 +112,23 @@ namespace PRN221_Project.Pages.Classes
 
         private bool IsDuplicateEntry(string clast, string subject, string teacher, string room, string timeSlot)
         {
-            return context.Calendars.Any(item =>
+            return context.Calender2s.Any(item =>
                 item.Class == clast &&
                 item.Subject == subject &&
                 item.Teacher == teacher &&
                 item.Room == room &&
-                item.TimeSlot == timeSlot
+                item.Session == timeSlot.Substring(0, 1) &&
+                item.Slot1 == int.Parse(timeSlot.Substring(1, 1)) &&
+                item.Slot2 == int.Parse(timeSlot.Substring(2, 1))
             );
         }
 
         private bool CheckConflict(string clast, string subject, string teacher, string room, string time)
         {
-            return !context.Calendars.Any(item =>
-                (item.Room == room && item.TimeSlot == time && (item.Class != clast || item.Teacher != teacher || item.Subject != subject)) ||
-                (item.Class == clast && item.TimeSlot == time && (item.Room != room || item.Teacher != teacher || item.Subject != subject)) ||
-                (item.TimeSlot == time && item.Teacher == teacher && (item.Room != room || item.Class != clast || item.Subject != subject)));
+            return !context.Calender2s.Any(item =>
+                (item.Room == room && (item.Session + item.Slot1 + item.Slot2) == time && (item.Class != clast || item.Teacher != teacher || item.Subject != subject)) ||
+                (item.Class == clast && item.Session == time.Substring(0, 1) && item.Slot1 == int.Parse(time.Substring(1, 1)) && item.Slot2 == int.Parse(time.Substring(2, 1)) && (item.Room != room || item.Teacher != teacher || item.Subject != subject)) ||
+                ((item.Session + item.Slot1 + item.Slot2) == time && item.Teacher == teacher && (item.Room != room || item.Class != clast || item.Subject != subject)));
         }
     }
 }

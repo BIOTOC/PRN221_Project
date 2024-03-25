@@ -15,7 +15,10 @@ namespace PRN221_Project.Pages.Classes
             this.context = context;
         }
 
-        public List<Calendar> Calendars { get; set; }
+        public List<Calender2> Calendars { get; set; }
+
+        public string ErrorMessage { get; set; }
+
 
 
         public IActionResult OnPost(IFormFile file)
@@ -56,13 +59,15 @@ namespace PRN221_Project.Pages.Classes
                             continue;
                         }
 
-                        context.Calendars.Add(new Calendar
+                        context.Calender2s.Add(new Calender2
                         {
                             Class = clast,
                             Subject = subject,
                             Teacher = teacher,
                             Room = room,
-                            TimeSlot = timeSlot
+                            Session = timeSlot.Substring(0, 1),
+                            Slot1 = int.Parse(timeSlot.Substring(1, 1)),
+                            Slot2 = int.Parse(timeSlot.Substring(2, 1))
                         });
                     }
 
@@ -87,26 +92,28 @@ namespace PRN221_Project.Pages.Classes
 
         private bool IsDuplicateEntry(string clast, string subject, string teacher, string room, string timeSlot)
         {
-            return context.Calendars.Any(item =>
+            return context.Calender2s.Any(item =>
                 item.Class == clast &&
                 item.Subject == subject &&
                 item.Teacher == teacher &&
                 item.Room == room &&
-                item.TimeSlot == timeSlot
+                item.Session == timeSlot.Substring(0,1) &&
+                item.Slot1 == int.Parse(timeSlot.Substring(1, 1)) &&
+                item.Slot2 == int.Parse(timeSlot.Substring(2, 1))
             );
         }
 
         private bool CheckConflict(string clast, string subject, string teacher, string room, string time)
         {
-            return !context.Calendars.Any(item =>
-                (item.Room == room && item.TimeSlot == time && (item.Class != clast || item.Teacher != teacher || item.Subject != subject)) ||
-                (item.Class == clast && item.TimeSlot == time && (item.Room != room || item.Teacher != teacher || item.Subject != subject)) ||
-                (item.TimeSlot == time && item.Teacher == teacher && (item.Room != room || item.Class != clast || item.Subject != subject)));
+            return !context.Calender2s.Any(item =>
+                (item.Room == room && (item.Session + item.Slot1 + item.Slot2) == time && (item.Class != clast || item.Teacher != teacher || item.Subject != subject)) ||
+                (item.Class == clast && item.Session == time.Substring(0,1) && item.Slot1 == int.Parse(time.Substring(1, 1)) && item.Slot2 == int.Parse(time.Substring(2, 1)) && (item.Room != room || item.Teacher != teacher || item.Subject != subject)) ||
+                ((item.Session + item.Slot1 + item.Slot2) == time && item.Teacher == teacher && (item.Room != room || item.Class != clast || item.Subject != subject)));
         }
 
         public IActionResult OnGet()
         {
-            Calendars = context.Calendars.ToList();
+            Calendars = context.Calender2s.ToList();
             return Page();
         }
 
@@ -115,31 +122,43 @@ namespace PRN221_Project.Pages.Classes
             if (!IsValidTimeSlot(txtTime))
             {
                 ModelState.AddModelError(string.Empty, "Invalid time slot.");
+                ErrorMessage = "Invalid time slot.";
+
+                Calendars = context.Calender2s.ToList();
                 return Page();
             }
 
             if (IsDuplicateEntry(txtClass, txtSubject, txtTeacher, txtRoom, txtTime))
             {
                 ModelState.AddModelError(string.Empty, "Duplicate entry.");
+                ErrorMessage = "Duplicate entry.";
+
+                Calendars = context.Calender2s.ToList();
                 return Page();
             }
 
             if (!CheckConflict(txtClass, txtSubject, txtTeacher, txtRoom, txtTime))
             {
                 ModelState.AddModelError(string.Empty, "Conflict detected.");
+                ErrorMessage = "Conflict detected.";
+
+                Calendars = context.Calender2s.ToList();
+
                 return Page();
             }
 
-            var newCalendar = new Calendar
+            var newCalendar = new Calender2
             {
                 Class = txtClass,
                 Subject = txtSubject,
                 Teacher = txtTeacher,
                 Room = txtRoom,
-                TimeSlot = txtTime
+                Session = txtTime.Substring(0,1),
+                Slot1 = int.Parse(txtTime.Substring(1,1)),
+                Slot2 = int.Parse(txtTime.Substring(2, 1))
             };
 
-            context.Calendars.Add(newCalendar);
+            context.Calender2s.Add(newCalendar);
             context.SaveChanges();
 
             return RedirectToPage();
@@ -152,14 +171,14 @@ namespace PRN221_Project.Pages.Classes
                 return NotFound();
             }
 
-            var calendar = context.Calendars.Find(id);
+            var calendar = context.Calender2s.Find(id);
 
             if (calendar == null)
             {
                 return NotFound();
             }
 
-            context.Calendars.Remove(calendar);
+            context.Calender2s.Remove(calendar);
             context.SaveChanges();
 
             return RedirectToPage();

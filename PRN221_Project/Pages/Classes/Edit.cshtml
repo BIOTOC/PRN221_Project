@@ -11,7 +11,12 @@
 <body>
     <div class="container">
         <h1>Edit</h1>
-
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @Model.ErrorMessage
+            </div>
+        }
         <form method="post">
             <input type="hidden" />
             <div class="form-group">
@@ -32,7 +37,7 @@
             </div>
             <div class="form-group">
                 <label for="txtTime">Time Slot:</label>
-                <input type="text" class="form-control" id="txtTime" name="txtTime" value="@calendar.TimeSlot" />
+                <input type="text" class="form-control" id="txtTime" name="txtTime" value="@calendar.Session@calendar.Slot1@calendar.Slot2" />
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
         </form>

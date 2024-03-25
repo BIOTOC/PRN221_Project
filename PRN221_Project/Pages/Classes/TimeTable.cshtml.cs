@@ -18,11 +18,14 @@ namespace PRN221_Project.Pages.Classes
         public Dictionary<Tuple<int, int>, Calender2> TimeSlot;
 
         public List<Calender2> Calendars { get; set; }
-        String ca = "KhangPQ";
-        public void OnGet()
+
+        public List<Calender2> list { get; set; }
+
+        public void OnGet(String? teacher)
         {
             
-            Calendars = _context.Calender2s.Where(x => x.Teacher.Equals(ca)).ToList();
+            Calendars = _context.Calender2s.Where(x => x.Teacher.Equals(teacher)).ToList();
+            list = _context.Calender2s.ToList();
             foreach (var c in Calendars)
             {
                 int session = getSession(c.Session);
